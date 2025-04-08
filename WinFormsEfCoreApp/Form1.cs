@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,23 +20,36 @@ namespace WinFormsEfCoreApp
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            var addForm = new Form2();
+            if (addForm.ShowDialog() == DialogResult.OK)
+            {
+                // Dane zostaÅ‚y dodane
+                LoadUsers();
+            }
+            /*
             using (var db = new AppDbContext())
             {
-                db.Database.EnsureCreated(); // tworzy bazê jeœli nie istnieje
+                db.Database.EnsureCreated(); // tworzy bazÃª jeÅ“li nie istnieje
 
-                var user = new User
+                var CE = new CalendarEvent
                 {
-                    Name = txtName.Text.Trim(),
-                    Email = txtEmail.Text.Trim()
+                    Title = txtName.Text.Trim(),
+                    Start = DateTime.Now,
+                    Description = "",
+                    End = DateTime.Now,
+                    AllDay = false,
+                    Reminder = true,
+                    ReminderTime = DateTime.Now
                 };
 
-                db.Users.Add(user);
+                db.CalendarEvents.Add(CE);
                 db.SaveChanges();
             }
 
             LoadUsers();
             txtName.Clear();
             txtEmail.Clear();
+            */
         }
 
         private void LoadUsers()
@@ -44,10 +57,10 @@ namespace WinFormsEfCoreApp
             lstUsers.Items.Clear();
             using (var db = new AppDbContext())
             {
-                var users = db.Users.ToList();
-                foreach (var user in users)
+                var CEs = db.CalendarEvents.ToList();
+                foreach (var CE in CEs)
                 {
-                    lstUsers.Items.Add(user); // dodaj ca³y obiekt
+                    lstUsers.Items.Add(CE); // dodaj caÂ³y obiekt
                 }
             }
         }
@@ -56,7 +69,7 @@ namespace WinFormsEfCoreApp
         {
             using (var db = new AppDbContext())
             {
-                db.Database.EnsureCreated(); // bardzo wa¿ne!
+                db.Database.EnsureCreated(); // bardzo waÂ¿ne!
             }
             LoadUsers();
 
@@ -64,19 +77,19 @@ namespace WinFormsEfCoreApp
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (lstUsers.SelectedItem is User selectedUser)
+            if (lstUsers.SelectedItem is CalendarEvent selectedUser)
             {
                 using (var db = new AppDbContext())
                 {
-                    db.Users.Remove(db.Users.Find(selectedUser.Id));
+                    db.CalendarEvents.Remove(db.CalendarEvents.Find(selectedUser.Id));
                     db.SaveChanges();
                 }
 
-                LoadUsers(); // odœwie¿ listê
+                LoadUsers(); // odÅ“wieÂ¿ listÃª
             }
             else
             {
-                MessageBox.Show("Zaznacz u¿ytkownika do usuniêcia.");
+                MessageBox.Show("Zaznacz uÂ¿ytkownika do usuniÃªcia.");
             }
         }
 
@@ -85,7 +98,7 @@ namespace WinFormsEfCoreApp
             string city = txtCity.Text.Trim();
             if (string.IsNullOrEmpty(city))
             {
-                MessageBox.Show("Wpisz nazwê miasta.");
+                MessageBox.Show("Wpisz nazwÃª miasta.");
                 return;
             }
 
@@ -103,11 +116,11 @@ namespace WinFormsEfCoreApp
                     string weather = data["weather"][0]["description"].ToString();
                     string temp = data["main"]["temp"].ToString();
 
-                    lblWeather.Text = $"Pogoda w {city}: {weather}, {temp}°C";
+                    lblWeather.Text = $"Pogoda w {city}: {weather}, {temp}Â°C";
                 }
                 catch (HttpRequestException)
                 {
-                    MessageBox.Show("Nie uda³o siê pobraæ danych. SprawdŸ nazwê miasta.");
+                    MessageBox.Show("Nie udaÂ³o siÃª pobraÃ¦ danych. SprawdÅ¸ nazwÃª miasta.");
                 }
             }
         }
@@ -119,10 +132,10 @@ namespace WinFormsEfCoreApp
 
         private void lstUsers_SelectedIndexChanged(object sender, EventArgs e)
 {
-    if (lstUsers.SelectedItem is User selectedUser)
+    if (lstUsers.SelectedItem is CalendarEvent selectedUser)
     {
-        txtName.Text = selectedUser.Name;
-        txtEmail.Text = selectedUser.Email;
+        txtName.Text = selectedUser.Title;
+        //txtEmail.Text = selectedUser.Email;
     }
 }
     }

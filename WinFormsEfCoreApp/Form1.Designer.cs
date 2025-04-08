@@ -71,9 +71,9 @@
             // 
             lstUsers.FormattingEnabled = true;
             lstUsers.ItemHeight = 15;
-            lstUsers.Location = new Point(668, 97);
+            lstUsers.Location = new Point(263, 112);
             lstUsers.Name = "lstUsers";
-            lstUsers.Size = new Size(120, 154);
+            lstUsers.Size = new Size(525, 139);
             lstUsers.TabIndex = 4;
             // 
             // btnDelete
