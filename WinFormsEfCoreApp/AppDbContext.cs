@@ -10,8 +10,9 @@ namespace WinFormsEfCoreApp
     public class AppDbContext : DbContext
     {
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=Events.db");
+            => options.UseSqlite("Data Source=EventsUsers.db");
     }
 }

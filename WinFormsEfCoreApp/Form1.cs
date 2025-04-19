@@ -17,71 +17,55 @@ namespace WinFormsEfCoreApp
             InitializeComponent();
         }
 
+        //
+        // funkcje/testy/obsługa klasy użytkowników
+        //
 
+        // pobranie i dodanie calej listy do lstUsers (odświeżenie)
+        private void LoadUsers()
+        {
+            lstUsers.Items.Clear();
+            using (var db = new AppDbContext())
+            {
+                var users = db.Users.ToList();
+                foreach (var user in users)
+                {
+                    lstUsers.Items.Add(user); // dodaj ca³y obiekt
+                }
+            }
+        }
+
+        // obsługa dodania użytkownika
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            var addForm = new Form2();
-            if (addForm.ShowDialog() == DialogResult.OK)
-            {
-                // Dane zostały dodane
-                LoadUsers();
-            }
-            /*
             using (var db = new AppDbContext())
             {
                 db.Database.EnsureCreated(); // tworzy bazê jeœli nie istnieje
 
-                var CE = new CalendarEvent
+                var user = new User
                 {
-                    Title = txtName.Text.Trim(),
-                    Start = DateTime.Now,
-                    Description = "",
-                    End = DateTime.Now,
-                    AllDay = false,
-                    Reminder = true,
-                    ReminderTime = DateTime.Now
+                    Name = txtName.Text.Trim(),
+                    Email = txtEmail.Text.Trim(),
+                    Password = "U_shouldnt_care"
                 };
 
-                db.CalendarEvents.Add(CE);
+                db.Users.Add(user);
                 db.SaveChanges();
             }
 
             LoadUsers();
             txtName.Clear();
             txtEmail.Clear();
-            */
         }
 
-        private void LoadUsers()
-        {
-            lstUsers.Items.Clear();
-            using (var db = new AppDbContext())
-            {
-                var CEs = db.CalendarEvents.ToList();
-                foreach (var CE in CEs)
-                {
-                    lstUsers.Items.Add(CE); // dodaj ca³y obiekt
-                }
-            }
-        }
-
-        private void Form1_Load_1(object sender, EventArgs e)
-        {
-            using (var db = new AppDbContext())
-            {
-                db.Database.EnsureCreated(); // bardzo wa¿ne!
-            }
-            LoadUsers();
-
-        }
-
+        // obsługa usunięcia użytkownika
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (lstUsers.SelectedItem is CalendarEvent selectedUser)
+            if (lstUsers.SelectedItem is User selectedUser)
             {
                 using (var db = new AppDbContext())
                 {
-                    db.CalendarEvents.Remove(db.CalendarEvents.Find(selectedUser.Id));
+                    db.Users.Remove(db.Users.Find(selectedUser.Id));
                     db.SaveChanges();
                 }
 
@@ -93,6 +77,68 @@ namespace WinFormsEfCoreApp
             }
         }
 
+        // nie wiem do czego to, można usunąć???
+        private void lstUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstUsers.SelectedItem is User selectedUser)
+            {
+                txtName.Text = selectedUser.Name;
+                txtEmail.Text = selectedUser.Email;
+            }
+        }
+
+        //
+        // funkcje/testy/obsługa klasy eventów
+        //
+
+        // pobranie i dodanie calej listy do lstEvents (odświeżenie)
+        private void LoadEvents()
+        {
+            lstEvents.Items.Clear();
+            using (var db = new AppDbContext())
+            {
+                db.Database.EnsureCreated();
+                var CEs = db.CalendarEvents.ToList();
+                foreach (var CE in CEs)
+                {
+                    lstEvents.Items.Add(CE); // dodaj ca³y obiekt
+                }
+            }
+        }
+
+        // obsługa dodania eventu
+        private void btnAddEvent_Click(object sender, EventArgs e)
+        {
+            var addForm = new Form2();
+            if (addForm.ShowDialog() == DialogResult.OK)
+            {
+                // Dane zostały dodane
+                LoadEvents();
+            }
+        }
+
+        // obsługa usunięcia eventu
+        private void btnDeleteEvent_Click(object sender, EventArgs e)
+        {
+            if (lstEvents.SelectedItem is CalendarEvent selectedEvent)
+            {
+                using (var db = new AppDbContext())
+                {
+                    db.CalendarEvents.Remove(db.CalendarEvents.Find(selectedEvent.Id));
+                    db.SaveChanges();
+                }
+
+                LoadEvents(); // odśwież liste
+            }
+            else
+            {
+                MessageBox.Show("Zaznacz event do usuniêcia.");
+            }
+        }
+
+        //
+        // obsługa pogody
+        //
         private async void btnGetWeather_Click(object sender, EventArgs e)
         {
             string city = txtCity.Text.Trim();
@@ -127,16 +173,21 @@ namespace WinFormsEfCoreApp
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-
+            LoadUsers();
         }
 
-        private void lstUsers_SelectedIndexChanged(object sender, EventArgs e)
-{
-    if (lstUsers.SelectedItem is CalendarEvent selectedUser)
-    {
-        txtName.Text = selectedUser.Title;
-        //txtEmail.Text = selectedUser.Email;
-    }
-}
+
+        // funkcja uruchomiona raz po otwarciu okna
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+            /* // dodałem sprawdzenie do funkcji LoadUsers(), wtedy tutaj chyba nie potrzebne?
+            using (var db = new AppDbContext())
+            {
+                db.Database.EnsureCreated(); // bardzo wa¿ne!
+            }
+            */
+            LoadUsers();
+            LoadEvents();
+        }
     }
 }
