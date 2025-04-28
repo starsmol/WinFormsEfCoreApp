@@ -8,13 +8,25 @@ using Newtonsoft.Json.Linq;
 
 namespace WinFormsEfCoreApp
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
 
         private string apiKey = "3b638ef7fbfc3a37a7705e78eb8d8a68";
-        public Form1()
+        public Main()
         {
             InitializeComponent();
+        }
+
+        private void LoadUsers2()
+        {
+            using (var db = new AppDbContext())
+            {
+                var users = db.Users.ToList(); // Pobieramy wszystkich użytkowników z bazy
+
+                cmbUsers.DataSource = users;      // Przypisujemy dane do ComboBox
+                cmbUsers.DisplayMember = "Name";  // Pokazujemy nazwę użytkownika
+                cmbUsers.ValueMember = "Id";      // Wartością będzie ID użytkownika
+            }
         }
 
         //
@@ -22,70 +34,28 @@ namespace WinFormsEfCoreApp
         //
 
         // pobranie i dodanie calej listy do lstUsers (odświeżenie)
-        private void LoadUsers()
-        {
-            lstUsers.Items.Clear();
-            using (var db = new AppDbContext())
-            {
-                var users = db.Users.ToList();
-                foreach (var user in users)
-                {
-                    lstUsers.Items.Add(user); // dodaj ca³y obiekt
-                }
-            }
-        }
+
 
         // obsługa dodania użytkownika
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            using (var db = new AppDbContext())
+            var addForm = new AddUser();
+            if (addForm.ShowDialog() == DialogResult.OK)
             {
-                db.Database.EnsureCreated(); // tworzy bazê jeœli nie istnieje
-
-                var user = new User
-                {
-                    Name = txtName.Text.Trim(),
-                    Email = txtEmail.Text.Trim(),
-                    Password = "U_shouldnt_care"
-                };
-
-                db.Users.Add(user);
-                db.SaveChanges();
+                // Dane zostały dodane
+                LoadEvents();
+                LoadUsers2();
             }
-
-            LoadUsers();
-            txtName.Clear();
-            txtEmail.Clear();
         }
 
         // obsługa usunięcia użytkownika
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (lstUsers.SelectedItem is User selectedUser)
-            {
-                using (var db = new AppDbContext())
-                {
-                    db.Users.Remove(db.Users.Find(selectedUser.Id));
-                    db.SaveChanges();
-                }
 
-                LoadUsers(); // odœwie¿ listê
-            }
-            else
-            {
-                MessageBox.Show("Zaznacz u¿ytkownika do usuniêcia.");
-            }
         }
 
         // nie wiem do czego to, można usunąć???
-        private void lstUsers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (lstUsers.SelectedItem is User selectedUser)
-            {
-                txtName.Text = selectedUser.Name;
-                txtEmail.Text = selectedUser.Email;
-            }
-        }
+
 
         //
         // funkcje/testy/obsługa klasy eventów
@@ -106,15 +76,43 @@ namespace WinFormsEfCoreApp
             }
         }
 
+        private void LoadEventsForUser()
+        {
+            if (cmbUsers.SelectedItem is User selectedUser)
+            {
+                int UserID = selectedUser.Id;
+
+                using (var db = new AppDbContext())
+                {
+                    db.Database.EnsureCreated();
+                    var events = db.CalendarEvents.Where(e => e.UserId == UserID).ToList();
+                    cmbEvent.DataSource = events;
+                    cmbEvent.DisplayMember = "Title";
+                    cmbEvent.ValueMember = "Id";
+
+                }
+            }
+        }
+
+        private void cmbUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadEventsForUser();
+        }
+
         // obsługa dodania eventu
         private void btnAddEvent_Click(object sender, EventArgs e)
         {
-            var addForm = new Form2();
-            if (addForm.ShowDialog() == DialogResult.OK)
+            if (cmbUsers.SelectedItem is User selectedUser)
             {
-                // Dane zostały dodane
-                LoadEvents();
+                var addForm = new Form2(selectedUser);
+                if (addForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Dane zostały dodane
+                    LoadEvents();
+                }
             }
+
+
         }
 
         // obsługa usunięcia eventu
@@ -173,7 +171,6 @@ namespace WinFormsEfCoreApp
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            LoadUsers();
         }
 
 
@@ -186,8 +183,23 @@ namespace WinFormsEfCoreApp
                 db.Database.EnsureCreated(); // bardzo wa¿ne!
             }
             */
-            LoadUsers();
+            LoadUsers2();
             LoadEvents();
+        }
+
+        private void lstUsers_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

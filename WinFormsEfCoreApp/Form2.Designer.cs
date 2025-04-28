@@ -70,6 +70,7 @@
             textDescription.PlaceholderText = "Opis wydarzenia";
             textDescription.Size = new Size(198, 23);
             textDescription.TabIndex = 2;
+            textDescription.TextChanged += textDescription_TextChanged;
             // 
             // datePicker
             // 

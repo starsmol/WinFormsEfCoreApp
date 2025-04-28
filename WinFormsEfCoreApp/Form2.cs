@@ -13,9 +13,12 @@ namespace WinFormsEfCoreApp
 {
     public partial class Form2 : Form
     {
-        public Form2()
+        int _userId;
+        public Form2(User selectedUser)
         {
             InitializeComponent();
+
+             _userId = selectedUser.Id;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -26,7 +29,8 @@ namespace WinFormsEfCoreApp
 
                 DateTime final_start = datePicker.Value.Date;
                 DateTime? final_end = null;
-                if (checkBoxAllDay.Checked == false) { 
+                if (checkBoxAllDay.Checked == false)
+                {
                     int hour = (int)numericHour.Value;
                     int minute = (int)numericMinute.Value;
                     int duration = (int)numericDuration.Value;
@@ -49,7 +53,8 @@ namespace WinFormsEfCoreApp
                     End = final_end,
                     AllDay = checkBoxAllDay.Checked,
                     Reminder = checkBoxReminder.Checked,
-                    ReminderTime = final_remind
+                    ReminderTime = final_remind,
+                    UserId = _userId
                 };
 
 
@@ -59,6 +64,11 @@ namespace WinFormsEfCoreApp
 
             this.DialogResult = DialogResult.OK; // sygnał dla Form1
             this.Close();
+        }
+
+        private void textDescription_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

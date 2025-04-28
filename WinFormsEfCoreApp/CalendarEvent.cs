@@ -17,9 +17,13 @@ namespace WinFormsEfCoreApp
         public bool Reminder { get; set; }
         public DateTime? ReminderTime { get; set; }
 
+        public int UserId { get; set; }           // Klucz obcy
+        public User User { get; set; }             // Nawigacyjna właściwość
+
+
         public override string ToString()
         {
-            return $"{Title}, opis: {Description}, data: {Start.ToShortDateString()}, godz.:{Start.ToString("t")}";
+            return $"{Title}, opis: {Description}, data: {Start.ToShortDateString()}, godz.:{Start.ToString("t")}, UserId: {UserId}";
         }
     }
 }
