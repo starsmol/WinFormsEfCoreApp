@@ -37,13 +37,13 @@ namespace WinFormsEfCoreApp
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(311, 236);
+            btnAdd.Location = new Point(311, 330);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(152, 36);
             btnAdd.TabIndex = 0;
             btnAdd.Text = "Dodaj Użytkownika";
             btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += this.btnAdd_Click;
+            btnAdd.Click += btnAdd_Click;
             // 
             // textName
             // 
@@ -55,7 +55,7 @@ namespace WinFormsEfCoreApp
             // 
             // textPassword
             // 
-            textPassword.Location = new Point(311, 149);
+            textPassword.Location = new Point(311, 87);
             textPassword.Name = "textPassword";
             textPassword.PlaceholderText = "Hasło";
             textPassword.Size = new Size(152, 23);
@@ -63,7 +63,7 @@ namespace WinFormsEfCoreApp
             // 
             // textEmail
             // 
-            textEmail.Location = new Point(311, 103);
+            textEmail.Location = new Point(311, 127);
             textEmail.Name = "textEmail";
             textEmail.PlaceholderText = "Email";
             textEmail.Size = new Size(152, 23);
@@ -84,7 +84,7 @@ namespace WinFormsEfCoreApp
             PerformLayout();
         }
 
-        
+
 
         #endregion
 
