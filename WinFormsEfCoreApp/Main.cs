@@ -65,38 +65,36 @@ namespace WinFormsEfCoreApp
         private void LoadEvents()
         {
             lstEvents.Items.Clear();
-            using (var db = new AppDbContext())
-            {
-                db.Database.EnsureCreated();
-                var CEs = db.CalendarEvents.ToList();
-                foreach (var CE in CEs)
-                {
-                    lstEvents.Items.Add(CE); // dodaj ca³y obiekt
-                }
-            }
-        }
-
-        private void LoadEventsForUser()
-        {
             if (cmbUsers.SelectedItem is User selectedUser)
             {
-                int UserID = selectedUser.Id;
-
                 using (var db = new AppDbContext())
                 {
                     db.Database.EnsureCreated();
-                    var events = db.CalendarEvents.Where(e => e.UserId == UserID).ToList();
-                    cmbEvent.DataSource = events;
-                    cmbEvent.DisplayMember = "Title";
-                    cmbEvent.ValueMember = "Id";
-
+                    var CEs = db.CalendarEvents.Where(e => e.UserId == selectedUser.Id).ToList();
+                    foreach (var CE in CEs)
+                    {
+                        lstEvents.Items.Add(CE); // dodaj ca³y obiekt
+                    }
                 }
             }
+
         }
 
-        private void cmbUsers_SelectedIndexChanged(object sender, EventArgs e)
+
+
+
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadEventsForUser();
+            LoadEvents();
+        }
+
+        private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           if (lstEvents.SelectedItem is CalendarEvent selectedEvent)
+            {
+                lblDescription.Text = selectedEvent.Description;
+            }
         }
 
         // obsługa dodania eventu
@@ -169,9 +167,7 @@ namespace WinFormsEfCoreApp
             }
         }
 
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-        }
+
 
 
         // funkcja uruchomiona raz po otwarciu okna
@@ -187,17 +183,39 @@ namespace WinFormsEfCoreApp
             LoadEvents();
         }
 
-        private void lstUsers_SelectedIndexChanged_1(object sender, EventArgs e)
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (cmbUsers.SelectedItem is User selectedUser)
+            {
+                using (var db = new AppDbContext())
+                {
+                    var eventsToDelete = db.CalendarEvents.Where(e => e.UserId == selectedUser.Id).ToList();
+                    db.CalendarEvents.RemoveRange(eventsToDelete);
+                    db.Users.Remove(db.Users.Find(selectedUser.Id));
+                    db.SaveChanges();
+                }
+
+                LoadUsers2(); // odśwież liste
+            }
+            else
+            {
+                MessageBox.Show("Zaznacz event do usunięcia.");
+            }
+        }
+
+        private void lblWeather_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
+        private void lblDescription_Click(object sender, EventArgs e)
         {
 
         }
