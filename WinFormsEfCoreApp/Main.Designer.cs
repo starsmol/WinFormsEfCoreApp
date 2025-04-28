@@ -42,6 +42,7 @@ namespace WinFormsEfCoreApp
             btnUserRemove = new Button();
             label2 = new Label();
             lblDescription = new Label();
+            btnEditEvent = new Button();
             SuspendLayout();
             // 
             // btnAdd
@@ -113,7 +114,7 @@ namespace WinFormsEfCoreApp
             // 
             // btnDeleteEvent
             // 
-            btnDeleteEvent.Location = new Point(12, 186);
+            btnDeleteEvent.Location = new Point(12, 175);
             btnDeleteEvent.Margin = new Padding(3, 2, 3, 2);
             btnDeleteEvent.Name = "btnDeleteEvent";
             btnDeleteEvent.Size = new Size(84, 57);
@@ -168,11 +169,22 @@ namespace WinFormsEfCoreApp
             lblDescription.Text = "opis";
             lblDescription.Click += lblDescription_Click;
             // 
+            // btnEditEvent
+            // 
+            btnEditEvent.Location = new Point(493, 134);
+            btnEditEvent.Name = "btnEditEvent";
+            btnEditEvent.Size = new Size(85, 55);
+            btnEditEvent.TabIndex = 22;
+            btnEditEvent.Text = "Edytuj zaznaczony event";
+            btnEditEvent.UseVisualStyleBackColor = true;
+            btnEditEvent.Click += btnEditEvent_Click;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnEditEvent);
             Controls.Add(lblDescription);
             Controls.Add(label2);
             Controls.Add(btnUserRemove);
@@ -209,5 +221,6 @@ namespace WinFormsEfCoreApp
         private Button btnUserRemove;
         private Label label2;
         private Label lblDescription;
+        private Button btnEditEvent;
     }
 }

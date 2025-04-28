@@ -91,7 +91,7 @@ namespace WinFormsEfCoreApp
 
         private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
         {
-           if (lstEvents.SelectedItem is CalendarEvent selectedEvent)
+            if (lstEvents.SelectedItem is CalendarEvent selectedEvent)
             {
                 lblDescription.Text = selectedEvent.Description;
             }
@@ -102,7 +102,7 @@ namespace WinFormsEfCoreApp
         {
             if (cmbUsers.SelectedItem is User selectedUser)
             {
-                var addForm = new Form2(selectedUser);
+                var addForm = new AddEvent(selectedUser);
                 if (addForm.ShowDialog() == DialogResult.OK)
                 {
                     // Dane zostały dodane
@@ -125,6 +125,23 @@ namespace WinFormsEfCoreApp
                 }
 
                 LoadEvents(); // odśwież liste
+            }
+            else
+            {
+                MessageBox.Show("Zaznacz event do usuniêcia.");
+            }
+        }
+        // obsługa edycji eventu
+        private void btnEditEvent_Click(object sender, EventArgs e)
+        {
+            if (lstEvents.SelectedItem is CalendarEvent selectedEvent)
+            {
+                var addForm = new AddEvent(selectedEvent);
+                if (addForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Dane zostały dodane
+                    LoadEvents();
+                }
             }
             else
             {

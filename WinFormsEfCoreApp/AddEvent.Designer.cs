@@ -1,6 +1,6 @@
 ﻿namespace WinFormsEfCoreApp
 {
-    partial class Form2
+    partial class AddEvent
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             textTitle = new TextBox();
-            richTextBox1 = new RichTextBox();
             textDescription = new TextBox();
             datePicker = new DateTimePicker();
             checkBoxAllDay = new CheckBox();
@@ -54,14 +53,6 @@
             textTitle.PlaceholderText = "Nazwa Wydarzenia";
             textTitle.Size = new Size(198, 23);
             textTitle.TabIndex = 0;
-            // 
-            // richTextBox1
-            // 
-            richTextBox1.Location = new Point(379, 22);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(8, 8);
-            richTextBox1.TabIndex = 1;
-            richTextBox1.Text = "";
             // 
             // textDescription
             // 
@@ -177,7 +168,6 @@
             Controls.Add(checkBoxAllDay);
             Controls.Add(datePicker);
             Controls.Add(textDescription);
-            Controls.Add(richTextBox1);
             Controls.Add(textTitle);
             Name = "Form2";
             Text = "Form2";
@@ -192,7 +182,6 @@
         #endregion
 
         private TextBox textTitle;
-        private RichTextBox richTextBox1;
         private TextBox textDescription;
         private DateTimePicker datePicker;
         private CheckBox checkBoxAllDay;
