@@ -22,21 +22,7 @@ namespace WinFormsEfCoreApp
         }
 
 
-        /// <summary>
-        /// załadaowanie listy użytkowników do comboboxa
-        /// </summary>
-        /// <param name="LoadUsers2">Loads users otherwise, false.</param>
-        private void LoadUsers2()
-        {
-            using (var db = new AppDbContext())
-            {
-                var users = db.Users.ToList(); // Pobieramy wszystkich użytkowników z bazy
-
-                cmbUsers.DataSource = users;      // Przypisujemy dane do ComboBox
-                cmbUsers.DisplayMember = "Name";  // Pokazujemy nazwę użytkownika
-                cmbUsers.ValueMember = "Id";      // Wartością będzie ID użytkownika
-            }
-        }
+        
 
         #region Windows Form Designer generated code
 
