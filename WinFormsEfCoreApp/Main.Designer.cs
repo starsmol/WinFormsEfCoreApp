@@ -21,9 +21,6 @@ namespace WinFormsEfCoreApp
             base.Dispose(disposing);
         }
 
-
-        
-
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -125,7 +122,7 @@ namespace WinFormsEfCoreApp
             // 
             // btnDeleteEvent
             // 
-            btnDeleteEvent.Location = new Point(208, 262);
+            btnDeleteEvent.Location = new Point(12, 175);
             btnDeleteEvent.Margin = new Padding(3, 2, 3, 2);
             btnDeleteEvent.Name = "btnDeleteEvent";
             btnDeleteEvent.Size = new Size(84, 57);
@@ -143,7 +140,7 @@ namespace WinFormsEfCoreApp
             cmbUsers.TabIndex = 15;
             cmbUsers.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
-            // cmbEvent
+            // użytkownicy
             // 
             użytkownicy.AutoSize = true;
             użytkownicy.Location = new Point(582, 96);
@@ -153,6 +150,25 @@ namespace WinFormsEfCoreApp
             użytkownicy.Text = "Użytkownicy";
             // 
             // btnUserRemove
+            // 
+            btnUserRemove.Location = new Point(694, 27);
+            btnUserRemove.Name = "btnUserRemove";
+            btnUserRemove.Size = new Size(81, 38);
+            btnUserRemove.TabIndex = 18;
+            btnUserRemove.Text = "Usuń użytkownika";
+            btnUserRemove.UseVisualStyleBackColor = true;
+            btnUserRemove.Click += button1_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(0, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(38, 15);
+            label2.TabIndex = 19;
+            label2.Text = "label2";
+            // 
+            // lblDescription
             // 
             lblDescription.Location = new Point(122, 262);
             lblDescription.Name = "lblDescription";
@@ -171,11 +187,79 @@ namespace WinFormsEfCoreApp
             btnEditEvent.UseVisualStyleBackColor = true;
             btnEditEvent.Click += btnEditEvent_Click;
             // 
+            // lstRecent
+            // 
+            lstRecent.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lstRecent.FormattingEnabled = true;
+            lstRecent.ItemHeight = 14;
+            lstRecent.Location = new Point(650, 186);
+            lstRecent.Name = "lstRecent";
+            lstRecent.Size = new Size(120, 88);
+            lstRecent.TabIndex = 23;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(94, 247);
+            label3.Name = "label3";
+            label3.Size = new Size(32, 15);
+            label3.TabIndex = 24;
+            label3.Text = "opis:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(55, 367);
+            label4.Name = "label4";
+            label4.Size = new Size(71, 15);
+            label4.TabIndex = 25;
+            label4.Text = "czas trwania";
+            // 
+            // lblDuration
+            // 
+            lblDuration.Location = new Point(147, 367);
+            lblDuration.Name = "lblDuration";
+            lblDuration.Size = new Size(340, 15);
+            lblDuration.TabIndex = 26;
+            lblDuration.Text = "-";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(40, 406);
+            label5.Name = "label5";
+            label5.Size = new Size(86, 15);
+            label5.TabIndex = 27;
+            label5.Text = "przypomnienie";
+            // 
+            // lblReminder
+            // 
+            lblReminder.Location = new Point(147, 406);
+            lblReminder.Name = "lblReminder";
+            lblReminder.Size = new Size(340, 23);
+            lblReminder.TabIndex = 28;
+            lblReminder.Text = "-";
+            // 
+            // label6
+            // 
+            label6.Location = new Point(650, 148);
+            label6.Name = "label6";
+            label6.Size = new Size(100, 35);
+            label6.TabIndex = 29;
+            label6.Text = "Nadchodzace przypomnienia:";
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label6);
+            Controls.Add(lblReminder);
+            Controls.Add(label5);
+            Controls.Add(lblDuration);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(lstRecent);
             Controls.Add(btnEditEvent);
             Controls.Add(lblDescription);
             Controls.Add(label2);
@@ -214,5 +298,12 @@ namespace WinFormsEfCoreApp
         private Label label2;
         private Label lblDescription;
         private Button btnEditEvent;
+        private ListBox lstRecent;
+        private Label label3;
+        private Label label4;
+        private Label lblDuration;
+        private Label label5;
+        private Label lblReminder;
+        private Label label6;
     }
 }

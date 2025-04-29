@@ -8,12 +8,9 @@ using Newtonsoft.Json.Linq;
 
 namespace WinFormsEfCoreApp
 {
-    /// <summary>
-    /// clasa główna
-    /// </summary>
     public partial class Main : Form
     {
-        
+
         private string apiKey = "3b638ef7fbfc3a37a7705e78eb8d8a68";
         public Main()
         {
@@ -77,20 +74,34 @@ namespace WinFormsEfCoreApp
 
         }
 
-
-
-
-
+        // odświeżenie po zmianie aktywnego użytkownika
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadEvents();
+            LoadClosestEvents();
         }
 
+        // odświeżenie opisu nowo wybranego eventu
         private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstEvents.SelectedItem is CalendarEvent selectedEvent)
             {
-                lblDescription.Text = selectedEvent.Description;
+                lblDescription.Text = selectedEvent.Description;    // wyświetlenie opisu eventu w oknie widoku
+                if (selectedEvent.AllDay)                           // wyświetlenie przedziału godzinowego czasu trwania eventu, lub komunikat gdy trwa cały dzień
+                {
+                    lblDuration.Text = "Caly dzien";
+                } else
+                {
+                    lblDuration.Text = $"{selectedEvent.Start.ToString("t")} - {selectedEvent.End.Value.ToString("t")}";
+                }
+                if (selectedEvent.Reminder)                         // wyświetlenie na ile dni przed eventem ustawiono przypomnienie, lub komunikat o braku przypomnienia
+                {
+                    TimeSpan ts = selectedEvent.Start - selectedEvent.ReminderTime.Value;
+                    lblReminder.Text = $"{ts.Days} dni przed wydarzeniem";
+                } else
+                {
+                    lblReminder.Text = "Brak";
+                }
             }
         }
 
