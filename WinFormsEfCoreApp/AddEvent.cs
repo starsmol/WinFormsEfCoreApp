@@ -11,14 +11,29 @@ using System.Xml.Linq;
 
 namespace WinFormsEfCoreApp
 {
-    public partial class Form2 : Form
+    public partial class AddEvent : Form
     {
         int _userId;
-        public Form2(User selectedUser)
+        int _eventId;
+        bool editing;
+        public AddEvent(User selectedUser)
         {
             InitializeComponent();
 
              _userId = selectedUser.Id;
+            editing = false;
+        }
+        public AddEvent(CalendarEvent thisEvent)
+        {
+            InitializeComponent();
+            _userId = thisEvent.UserId;
+            _eventId = thisEvent.Id;
+            editing = true;
+
+            // nadanie wartosci pol w oknie
+            datePicker.Value = thisEvent.Start;
+            textTitle.Text = thisEvent.Title;
+            textDescription.Text = thisEvent.Description;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -57,7 +72,11 @@ namespace WinFormsEfCoreApp
                     UserId = _userId
                 };
 
-
+                if (editing)
+                {
+                    db.CalendarEvents.Remove(db.CalendarEvents.Find(_eventId));
+                    db.SaveChanges();
+                }
                 db.CalendarEvents.Add(CE);
                 db.SaveChanges();
             }

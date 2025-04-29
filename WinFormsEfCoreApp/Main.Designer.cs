@@ -59,6 +59,7 @@ namespace WinFormsEfCoreApp
             btnUserRemove = new Button();
             label2 = new Label();
             lblDescription = new Label();
+            btnEditEvent = new Button();
             SuspendLayout();
             // 
             // btnAdd
@@ -130,7 +131,7 @@ namespace WinFormsEfCoreApp
             // 
             // btnDeleteEvent
             // 
-            btnDeleteEvent.Location = new Point(12, 186);
+            btnDeleteEvent.Location = new Point(208, 262);
             btnDeleteEvent.Margin = new Padding(3, 2, 3, 2);
             btnDeleteEvent.Name = "btnDeleteEvent";
             btnDeleteEvent.Size = new Size(84, 57);
@@ -148,35 +149,13 @@ namespace WinFormsEfCoreApp
             cmbUsers.TabIndex = 15;
             cmbUsers.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
-            // użytkownicy
+            // cmbEvent
             // 
-            użytkownicy.AutoSize = true;
-            użytkownicy.Location = new Point(582, 96);
-            użytkownicy.Name = "użytkownicy";
-            użytkownicy.Size = new Size(79, 15);
-            użytkownicy.TabIndex = 17;
-            użytkownicy.Text = "Użytkowniscy";
-            // 
-            // btnUserRemove
-            // 
-            btnUserRemove.Location = new Point(694, 27);
-            btnUserRemove.Name = "btnUserRemove";
-            btnUserRemove.Size = new Size(81, 38);
-            btnUserRemove.TabIndex = 18;
-            btnUserRemove.Text = "Usuń użytkownika";
-            btnUserRemove.UseVisualStyleBackColor = true;
-            btnUserRemove.Click += button1_Click;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(0, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(38, 15);
-            label2.TabIndex = 19;
-            label2.Text = "label2";
-            // 
-            // lblDescription
+            cmbEvent.FormattingEnabled = true;
+            cmbEvent.Location = new Point(667, 147);
+            cmbEvent.Name = "cmbEvent";
+            cmbEvent.Size = new Size(121, 23);
+            cmbEvent.TabIndex = 16;
             // 
             lblDescription.Location = new Point(122, 262);
             lblDescription.Name = "lblDescription";
@@ -190,10 +169,7 @@ namespace WinFormsEfCoreApp
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(lblDescription);
-            Controls.Add(label2);
-            Controls.Add(btnUserRemove);
-            Controls.Add(użytkownicy);
+            Controls.Add(cmbEvent);
             Controls.Add(cmbUsers);
             Controls.Add(btnDeleteEvent);
             Controls.Add(btnAddEvent);
@@ -222,9 +198,6 @@ namespace WinFormsEfCoreApp
         private Button btnAddEvent;
         private Button btnDeleteEvent;
         private ComboBox cmbUsers;
-        private Label użytkownicy;
-        private Button btnUserRemove;
-        private Label label2;
-        private Label lblDescription;
+        private ComboBox cmbEvent;
     }
 }
