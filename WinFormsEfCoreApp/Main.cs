@@ -20,7 +20,18 @@ namespace WinFormsEfCoreApp
             InitializeComponent();
         }
 
-        
+        private void LoadUsers2()
+        {
+            using (var db = new AppDbContext())
+            {
+                db.Database.EnsureCreated();    // Utworzenie bazy danych jeśli nie istnieje
+                var users = db.Users.ToList(); // Pobieramy wszystkich użytkowników z bazy
+
+                cmbUsers.DataSource = users;      // Przypisujemy dane do ComboBox
+                cmbUsers.DisplayMember = "Name";  // Pokazujemy nazwę użytkownika
+                cmbUsers.ValueMember = "Id";      // Wartością będzie ID użytkownika
+            }
+        }
 
         //
         // funkcje/testy/obsługa klasy użytkowników
@@ -32,65 +43,55 @@ namespace WinFormsEfCoreApp
         // obsługa dodania użytkownika
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            var addForm = new AddUser();
-            if (addForm.ShowDialog() == DialogResult.OK)
+            var addForm = new AddUser();    // przejście do widoku dodawania użytkownika
+            if (addForm.ShowDialog() == DialogResult.OK)    // Dodawanie użytkownika zakończone pomyślnie
             {
                 // Dane zostały dodane
                 LoadEvents();
                 LoadUsers2();
+                LoadClosestEvents();
             }
         }
 
-        // obsługa usunięcia użytkownika
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        // nie wiem do czego to, można usunąć???
-
 
         //
-        // funkcje/testy/obsługa klasy eventów
+        // funkcje/obsługa klasy eventów
         //
 
         // pobranie i dodanie calej listy do lstEvents (odświeżenie)
         private void LoadEvents()
         {
-            lstEvents.Items.Clear();
-            if (cmbUsers.SelectedItem is User selectedUser)
+            lstEvents.Items.Clear();    // usunięcie elementów z lstEvents
+            if (cmbUsers.SelectedItem is User selectedUser)     // warunek zaznaczenia użytkownika
             {
                 using (var db = new AppDbContext())
                 {
-                    db.Database.EnsureCreated();
-                    var CEs = db.CalendarEvents.Where(e => e.UserId == selectedUser.Id).ToList();
+                    db.Database.EnsureCreated();    // Utworzenie bazy danych jeśli nie istnieje
+                    var CEs = db.CalendarEvents.Where(e => e.UserId == selectedUser.Id).ToList();   // pobranie wszystkich eventów odpowiadających zaznaczonemu użytkownikowi
                     foreach (var CE in CEs)
                     {
-                        lstEvents.Items.Add(CE); // dodaj ca³y obiekt
+                        lstEvents.Items.Add(CE); // dodaj cały obiekt
                     }
                 }
             }
 
         }
 
-                using (var db = new AppDbContext())
-                {
-                    db.Database.EnsureCreated();
-                    var events = db.CalendarEvents.Where(e => e.UserId == UserID).ToList();
-                    cmbEvent.DataSource = events;
-                    cmbEvent.DisplayMember = "Title";
-                    cmbEvent.ValueMember = "Id";
 
-                }
-            }
-        }
-                }
-            }
-        }
 
-        private void cmbUsers_SelectedIndexChanged(object sender, EventArgs e)
+
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadEventsForUser();
+            LoadEvents();
+        }
+
+        private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstEvents.SelectedItem is CalendarEvent selectedEvent)
+            {
+                lblDescription.Text = selectedEvent.Description;
+            }
         }
 
         // obsługa dodania eventu
@@ -103,6 +104,7 @@ namespace WinFormsEfCoreApp
                 {
                     // Dane zostały dodane
                     LoadEvents();
+                    LoadClosestEvents();
                 }
             }
 
@@ -116,32 +118,57 @@ namespace WinFormsEfCoreApp
             {
                 using (var db = new AppDbContext())
                 {
-                    db.CalendarEvents.Remove(db.CalendarEvents.Find(selectedEvent.Id));
-                    db.SaveChanges();
+                    db.CalendarEvents.Remove(db.CalendarEvents.Find(selectedEvent.Id));     // usunięcie zaznaczonego eventu
+                    db.SaveChanges();                                                       // zapis zmian w bazie danych
                 }
 
-                LoadEvents(); // odśwież liste
+                LoadEvents();           // odśwież liste
+                LoadClosestEvents();    // odśwież listę przypomnień
             }
             else
             {
                 MessageBox.Show("Zaznacz event do usuniêcia.");
             }
         }
+
         // obsługa edycji eventu
         private void btnEditEvent_Click(object sender, EventArgs e)
         {
             if (lstEvents.SelectedItem is CalendarEvent selectedEvent)
             {
-                var addForm = new AddEvent(selectedEvent);
+                var addForm = new AddEvent(selectedEvent);      // przejście do widoku dodawania eventu (pola są uzupełnione bieżącymi wartościami)
                 if (addForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Dane zostały dodane
+                    // Dane zostały edytowane
                     LoadEvents();
+                    LoadClosestEvents();
                 }
             }
             else
             {
-                MessageBox.Show("Zaznacz event do usuniêcia.");
+                MessageBox.Show("Zaznacz event do edycji.");
+            }
+        }
+        // pobranie i dodanie trzech najbliższych eventów do aktualnej daty (odświeżenie)
+        private void LoadClosestEvents()
+        {
+            if (cmbUsers.SelectedItem is User selectedUser)
+            {
+                lstRecent.Items.Clear();    // usunięcie elementów z lstRecent
+                using (var db = new AppDbContext())
+                {
+                    db.Database.EnsureCreated();    // Utworzenie bazy danych jeśli nie istnieje
+                    var today = DateTime.Today;     // pobranie dzisiejszej daty
+                    var CEs = db.CalendarEvents     // pobranie eventów z bazy danych
+                        .Where(e => e.UserId == selectedUser.Id)    // tylko elementy powiązane z zaznaczonym użytkownikiem
+                        .Where(e => e.ReminderTime >= today)        // tylko elementy których czas przypomnienia jest większy niż aktualna data
+                        .OrderBy(e => e.ReminderTime)               // sortowanie po czasie przypomnienia
+                        .Take(3).ToList();                          // lista trzech pierwszych elementów
+                    foreach (var CE in CEs)
+                    {
+                        lstRecent.Items.Add(CE);    // dodanie obiektu do lstRecent
+                    }
+                }
             }
         }
 
@@ -186,14 +213,9 @@ namespace WinFormsEfCoreApp
         // funkcja uruchomiona raz po otwarciu okna
         private void Form1_Load_1(object sender, EventArgs e)
         {
-            /* // dodałem sprawdzenie do funkcji LoadUsers(), wtedy tutaj chyba nie potrzebne?
-            using (var db = new AppDbContext())
-            {
-                db.Database.EnsureCreated(); // bardzo wa¿ne!
-            }
-            */
-            LoadUsers2();
-            LoadEvents();
+            LoadUsers2();           // załaduj użytkowników z bazy danych
+            LoadEvents();           // załaduj eventy z bazy danych
+            LoadClosestEvents();    // załaduj trzy najbliższe przypomnienia z bazy danych
         }
 
 
@@ -214,7 +236,7 @@ namespace WinFormsEfCoreApp
             }
             else
             {
-                MessageBox.Show("Zaznacz event do usunięcia.");
+                MessageBox.Show("Zaznacz użytkownika do usunięcia.");
             }
         }
 

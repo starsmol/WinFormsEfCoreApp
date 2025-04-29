@@ -23,7 +23,7 @@ namespace WinFormsEfCoreApp
 
         public override string ToString()
         {
-            return $"{Title}, opis: {Description}, data: {Start.ToShortDateString()}, godz.:{Start.ToString("t")}";
+            return $"{Title, -17} dzien: {Start.ToShortDateString()}    g.{Start.ToString("t")}";
         }
     }
 }
